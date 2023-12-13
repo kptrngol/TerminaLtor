@@ -21,13 +21,11 @@ int main() {
     avatarC = 1;
     avatarLastR = 3;
     avatarLastC = 1;
-    int * pWin = &win;
-
 
     char gameMap[5][21] = 
     {
         {'#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','\n'},
-        {'#','$','#','#','$','#',' ',' ',' ',' ','#','$','#','#',' ','#',' ','#',' ','@','\n'},
+        {'#','$','#','#','$','#',' ',' ',' ',' ','#','$','#','#',' ','#',' ','#','@','#','\n'},
         {'#',' ',' ','#',' ',' ',' ',' ','#','#','#',' ','#','#',' ','#',' ',' ',' ','#','\n'},
         {'#',' ',' ',' ',' ','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#',' ','#','\n'},
         {'#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','\n'}
@@ -40,7 +38,7 @@ int main() {
     {
     drawAvatar(avatarR,avatarC,ptoMap);
     drawScene(mapH, mapW, ptoMap);
-    check(&pWin, ptoMap);
+    check(&win, ptoMap, mapH, mapW,3);
     savingPreviousAvatarPos(&avatarLastR,&avatarLastC,&avatarR,&avatarC);
     clear(avatarR, avatarC, ptoMap);
     // playerInput(&avatarR,&avatarC);
@@ -97,12 +95,32 @@ void clear(int r, int c, char (*p)[21])
 {
     p[r][c] = ' ';
 }
-void check(int*w,char (*p)[21])
+void check(int * winCheck,char (*p)[21],int h,int w, int max)
 {
-    printf("Absorb the %c!\n",p[1][19]);
-    if ((p[1][19]) == 'H') 
+    // points left counter
+    int point = 0;
+
+    for (int i = 0; i < h; i++) 
     {
-        exit(EXIT_SUCCESS);
+        for (int j = 0; j < w; j++)
+        {   
+            if (p[i][j] == '$') 
+            {
+                point ++;
+            }
+        }
+    }
+
+    if (p[1][18] == 'H') 
+    {
+        if ((max-point) == max) 
+        {
+            printf("You terminalted this level!\n");
+            exit(EXIT_SUCCESS);
+        } else 
+        {
+            printf("You still have %d point$ to collect\n", point);
+        }
     }
 }
 void savingPreviousAvatarPos(int * lastR,int * lastC,int * r, int * c)
