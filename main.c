@@ -9,7 +9,7 @@ void clear();
 void check();
 void savingPreviousAvatarPos();
 int collisionDetection();
-
+void drawPernamentEls();
 
 int main() {
 
@@ -21,6 +21,8 @@ int main() {
     avatarC = 1;
     avatarLastR = 3;
     avatarLastC = 1;
+
+
 
     char gameMap[5][21] = 
     {
@@ -36,16 +38,16 @@ int main() {
     
     while(win != 1)
     {
-    drawAvatar(avatarR,avatarC,ptoMap);
-    drawScene(mapH, mapW, ptoMap);
-    check(&win, ptoMap, mapH, mapW,3);
-    savingPreviousAvatarPos(&avatarLastR,&avatarLastC,&avatarR,&avatarC);
-    clear(avatarR, avatarC, ptoMap);
-    // playerInput(&avatarR,&avatarC);
-    do 
-    {
-        playerInput(&avatarR,&avatarC);
-    } while (collisionDetection(ptoMap,&avatarLastR,&avatarLastC,&avatarR,&avatarC));
+        drawPernamentEls(ptoMap);
+        drawAvatar(avatarR,avatarC,ptoMap);
+        drawScene(mapH, mapW, ptoMap);
+        check(&win, ptoMap, mapH, mapW,3);
+        savingPreviousAvatarPos(&avatarLastR,&avatarLastC,&avatarR,&avatarC);
+        clear(avatarR, avatarC, ptoMap);
+        do 
+        {
+            playerInput(&avatarR,&avatarC);
+        } while (collisionDetection(ptoMap,&avatarLastR,&avatarLastC,&avatarR,&avatarC));
     }
 
 }
@@ -146,4 +148,8 @@ int collisionDetection(char (*p)[21],int * lastR,int * lastC,int * r,int * c)
         return 0;
     }
     return 0;
+}
+void drawPernamentEls(char (*p)[21])
+{
+    p[1][18] = '@';
 }
