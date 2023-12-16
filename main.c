@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "maps.h"
 
 void drawScene();
 void drawAvatar();
@@ -22,37 +22,29 @@ int main() {
     avatarLastR = 3;
     avatarLastC = 1;
 
+    char (*ptoMap0)[100] = lvl0.map;
+    char (*ptoMap1)[100] = lvl1.map;
+    // w zależności od mapy, zmieniane są pointery przekazywane jako arguemnty funkcji?
+    // mapSelection
 
-
-    char gameMap[5][21] = 
-    {
-        {'#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','\n'},
-        {'#','$','#','#','$','#',' ',' ',' ',' ','#','$','#','#',' ','#',' ','#','@','#','\n'},
-        {'#',' ',' ','#',' ',' ',' ',' ','#','#','#',' ','#','#',' ','#',' ',' ',' ','#','\n'},
-        {'#',' ',' ',' ',' ','#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#',' ','#','\n'},
-        {'#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','#','\n'}
-    };
-
-    char (*ptoMap)[21] = gameMap;
-    printf("\n!Type a/w/s/d and click enter to move!\n\n");
-    
+    // game loop
     while(win != 1)
     {
-        drawPernamentEls(ptoMap);
-        drawAvatar(avatarR,avatarC,ptoMap);
-        drawScene(mapH, mapW, ptoMap);
-        check(&win, ptoMap, mapH, mapW,3);
+        drawPernamentEls(ptoMap0);
+        drawAvatar(avatarR,avatarC,ptoMap0);
+        drawScene(lvl0.h, lvl0.w, ptoMap0);
+        check(&win, ptoMap0, mapH, mapW,3);
         savingPreviousAvatarPos(&avatarLastR,&avatarLastC,&avatarR,&avatarC);
-        clear(avatarR, avatarC, ptoMap);
+        clear(avatarR, avatarC, ptoMap0);
         do 
         {
             playerInput(&avatarR,&avatarC);
-        } while (collisionDetection(ptoMap,&avatarLastR,&avatarLastC,&avatarR,&avatarC));
+        } while (collisionDetection(ptoMap0,&avatarLastR,&avatarLastC,&avatarR,&avatarC));
     }
 
 }
 
-void drawScene(int mapH, int mapW, char (*p)[21])
+void drawScene(int mapH, int mapW, char (*p)[100])
 {
     for (int h = 0; h < mapH; h++)
     {
@@ -63,7 +55,7 @@ void drawScene(int mapH, int mapW, char (*p)[21])
     }
     printf("\n");
 }
-void drawAvatar(int r,int c, char (*p)[21]) 
+void drawAvatar(int r,int c, char (*p)[100]) 
 {
 
     p[r][c] = 'H';
@@ -93,11 +85,11 @@ void playerInput(int *row,int *column)
     }
     
 }
-void clear(int r, int c, char (*p)[21]) 
+void clear(int r, int c, char (*p)[100]) 
 {
     p[r][c] = ' ';
 }
-void check(int * winCheck,char (*p)[21],int h,int w, int max)
+void check(int * winCheck,char (*p)[100],int h,int w, int max)
 {
     // points left counter
     int point = 0;
@@ -131,7 +123,7 @@ void savingPreviousAvatarPos(int * lastR,int * lastC,int * r, int * c)
     *lastC = *c;
 
 }
-int collisionDetection(char (*p)[21],int * lastR,int * lastC,int * r,int * c)
+int collisionDetection(char (*p)[100],int * lastR,int * lastC,int * r,int * c)
 {
     int r1, c1;
     char el;
@@ -149,7 +141,7 @@ int collisionDetection(char (*p)[21],int * lastR,int * lastC,int * r,int * c)
     }
     return 0;
 }
-void drawPernamentEls(char (*p)[21])
+void drawPernamentEls(char (*p)[100])
 {
     p[1][18] = '@';
 }
